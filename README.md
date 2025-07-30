@@ -1,0 +1,846 @@
+
+## Objectives
+
+In this lab, you will create a single agent that can use a search tool. You will test agents in ADK’s browser UI, from a CLI chat interface, and programmatically from within a script.
+
+You will consider:
+
+*   The key capabilities of Agent Development Kit
+*   The core concepts of ADK
+*   How to structure project directories for ADK
+*   The most fundamental parameters of agents in ADK, including how to specify model names and tools
+*   Some features of ADK’s browser UI
+*   How to control the output schema of an agent
+*   How to run agents in three ways (via the browser UI, programmatically, and via the CLI chat interface)
+
+## Use your IDE of choice (like VSCode) to perform the following tasks:
+
+
+## Task 1. Install ADK and set up your environment
+
+### Configure GCP Project details
+
+### Enable Vertex AI recommended APIs
+
+1. Step 3 from this [guide](https://cloud.google.com/vertex-ai/docs/start/cloud-environment#set_up_a_project)
+
+
+### Download and install the ADK and code samples for this lab
+
+1.  **Install ADK**
+
+    ```bash
+    sudo python3 -m pip install google-adk==1.6.1
+    ```
+2.  Install requirements with:
+
+    ```bash
+    sudo python3 -m pip install -r adk_project/requirements.txt
+    ```
+
+
+## Task 2. Review the structure of Agent Development Kit project directories
+
+1.  Use your IDE to open the **adk_project** folder. Click it to toggle it open.
+2.  This directory contains three other directories: **my_google_search_agent**, **app_agent**, and **llm_auditor**. Each of these directories represents a separate agent. Separating agents into their own directories within a project directory provides organization and allows Agent Development Kit to understand what agents are present.
+3.  Click on the **my_google_search_agent** to explore an agent directory.
+4.  Notice that the directory contains an `__init__.py` file and an `agent.py` file. An `__init__.py` file is typically used to identify a directory as a Python package that can be imported by other Python code. **Click the `init.py` file** to view its contents.
+5.  Notice that the `__init__.py`file contains a single line, which imports from the `agent.py` file. ADK uses this to identify this directory as an agent package:
+
+    ```python
+    from . import agent
+    ```
+6.  Now click on the `agent.py` file. This file consists of a simple agent. You will equip it with a powerful tool: the ability to search the internet using Google Search. Notice a few things about the file:
+    *   Notice the imports from `google.adk`: the `Agent` class and the `google_search` tool from the `tools` module
+    *   Read the code comments that describe the parameters that configure this simple agent.
+7.  To use the imported `google_search` tool, it needs to be passed to the agent. Do that by **pasting the following line** into the `agent.py` file where indicated at the end of the `Agent` object creation:
+
+    ```python
+      tools=[google_search]
+    ```
+8.  **Save** the file.
+
+> **Note:** Tools enable an agent to perform actions beyond generating text. In this case, the `google_search` tool allows the agent to decide when it would like more information than it already has from its training data. It can then write a search query, use Google Search to search the web, and then base its response to the user on the results. When a model bases its response on additional information that it retrieves, it is called "grounding," and this overall process is known as "retrieval-augmented generation" or "RAG."
+
+## Task 3. Run the agent using the ADK's Dev UI
+
+1.  Navigate to the **adk_project/my_google_search_agent** directory.
+2. Select the **.env** file in the **my_google_search_agent** directory.
+3. Paste these values over what is currently in the file to **update the file to include your project ID**:
+
+    ```ini
+    GOOGLE_GENAI_USE_VERTEXAI=TRUE
+    GOOGLE_CLOUD_PROJECT=YOUR_PROJECT
+    GOOGLE_CLOUD_LOCATION=us-central1
+    MODEL=gemini-2.0-flash-001
+    ```
+4. **Save** the file.
+
+    > **Note:** These variables play the following roles:
+    > *   `GOOGLE_GENAI_USE_VERTEXAI=TRUE` indicates that you will use Vertex AI for authentication as opposed to Gemini API key authentication.
+    > *   `GOOGLE_CLOUD_PROJECT` and `GOOGLE_CLOUD_LOCATION` provide the project and location with which to associate your model calls.
+    > *   `MODEL` is not required, but is stored here so that it can be loaded as another environment variable. This can be a convenient way to try different models in different deployment environments.
+    >
+    > When you test your agent using ADK's dev UI or the command-line chat interface, they will load and use an agent's `.env` file if one is present or else look for environment variables with the same names as those set here.
+5. In the Cloud Shell Terminal, ensure you are in the **adk_project** directory where your agent subdirectories are located by running:
+
+    ```bash
+    cd ~/adk_project
+    ```
+15. **Launch the Agent Development Kit Dev UI** with the following command:
+
+    ```bash
+    adk web
+    ```
+    **Output**
+    ```bash
+     INFO:   Started server process [2434]
+     INFO:   Waiting for application startup.
+     +-------------------------------------------------------+
+     | ADK Web Server started                                |
+     |                                                       |
+     | For local testing, access at http://localhost:8000.   |
+     +-------------------------------------------------------+
+
+     INFO:   Application startup complete.
+     INFO:   Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+    ```
+16. To view the web interface in a new tab, click the **http://127.0.0.1:8000** link in the Terminal output, which will link you via proxy to this app running locally on your Cloud Shell instance.
+17. A new browser tab will open with the ADK Dev UI.
+18. From the **Select an agent** dropdown on the left, select **my_google_search_agent**.
+
+
+19. In the chat input field in the bottom right, begin the conversation with:
+
+    ```bash
+    hello
+    ```
+20. The agent should respond. In order to encourage the agent to use its Google Search tool, enter the question:
+
+    ```bash
+    What is some recent global news?
+    ```
+21. You will notice from the results that the agent is able to use Google Search to get up-to-date information, rather than having its information stop on the date when its model was trained.
+
+    > **Important note:** When you use grounding with Google Search, you are [required to display these suggestions](https://cloud.google.com/vertex-ai/generative-ai/docs/multimodal/grounding-search-suggestions), which help users follow up on the information the model used for its response.
+22. Click the agent icon (![agent_icon](https://www.cloudskillsboost.google/focuses/126142?catalog_rank=%7B%22rank%22%3A3%2C%22num_filters%22%3A0%2C%22has_search%22%3Atrue%7D&parent=catalog&search_id=49852970#step8)) next to the agent's response (or an event from the list on the **Events** pane) to inspect the event returned by the agent, which includes the `content` returned to the user and `grounding_metadata` which details the search results that the response was based on.
+23. When you are finished exploring the dev UI, close this browser tab and return to your browser tab with the Cloud Shell Terminal, click on the terminal's pane, and press `CTRL + C` to stop the web server.
+
+
+
+## Task 4. Run an agent programmatically
+
+While the dev UI is great for testing and debugging, it is not suitable for presenting your agent to multiple users in production.
+
+To run an agent as part of a larger application, you will need to include a few additional components in your **agent.py** script that the web app handled for you in the previous task. Proceed with the following steps to open a script with these components to review them.
+
+1.  Run the following commands to export environment variables. You can use this approach to set environment variables for all of your agents to use if they do not have a `.env` file in their directory:
+
+    ```bash
+    TO DO
+    export GOOGLE_GENAI_USE_VERTEXAI=TRUE
+    export GOOGLE_CLOUD_PROJECT=YOUR PROJECT
+    export GOOGLE_CLOUD_LOCATION=us-central1
+    export MODEL=gemini-2.0-flash-001
+    ```
+2.  In the Cloud Shell Editor file browser, select the **adk_project/app_agent** directory.
+3.  Select the **agent.py** file in this directory.
+4.  This agent is designed to run as part of an application. Read the commented code in **agent.py**, paying particular attention to the following components in the code:
+
+    | Component                                 | Feature                       | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+    | :---------------------------------------- | :---------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+    | `InMemoryRunner()`                        | Oversight of agent execution  | The Runner is the code responsible for receiving the user's query, passing it to the appropriate agent, receiving the agent's response event and passing it back to the calling application or UI for rendering, and then triggering the following event. You can read more in the ADK [documentation about the event loop](https://google.github.io/adk-docs/runtime/#the-heartbeat-the-event-loop-inner-workings).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+    | `runner.session_service.create_session()` | Conversation history & shared state | Sessions allow an agent to preserve state, remembering a list of items, the current status of a task, or other 'current' information. This class creates a local session service for simplicity, but in production this could be handled by a database.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+    | `types.Content()` and `types.Part()`      | Structured, multimodal messages | Instead of a simple string, the agent is passed a Content object which can consist of multiple Parts. This allows for complex messages, including text and multimodal content to be passed to the agent in a specific order.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+
+    > When you ran the agent in the dev UI, it created a session service, artifact service, and runner for you. When you write your own agents to deploy programmatically, it is recommended that you provide these components as external services rather than relying on in-memory versions.
+
+5.  Notice that the script includes a hardcoded query, which asks the agent: `"What is the capital of France?"`
+6.  Run the following command in the Cloud Shell Terminal to run this agent programmatically:
+
+    ```bash
+    python3 app_agent/agent.py
+    ```
+    **Selected Output**
+    ```
+    trivia_agent: The capital of France is Paris.
+    ```
+7.  You can also define specific input and/or output schema for an agent.
+8.  You will now add imports for the [Pydantic schema classes](https://docs.pydantic.dev/1.10/usage/schema/) `BaseModel` and `Field` and use them to define a schema class consisting of just one field, with a key of "capital" and a string value intended for the name of a country's capital city. You can paste these lines into your **app_agent/agent.py** file, just after your other imports:
+
+    ```python
+    from pydantic import BaseModel, Field
+
+    class CountryCapital(BaseModel):
+      capital: str = Field(description="A country's capital.")
+    ```
+
+>**Important note:** When you define an output schema, you cannot use tools or agent transfers.
+
+9.  Within your `root_agent`'s `Agent` definition, add these parameters to disable transfers (as you are required to do when using an output schema) and to set the output to be generated according to the `CountryCapital` schema you defined above:
+
+    ```bash
+        disallow_transfer_to_parent=True,
+        disallow_transfer_to_peers=True,
+        output_schema=CountryCapital,
+    ```
+10. Run the agent script again to see the response following the `output_schema`:
+
+    ```bash
+    python3 app_agent/agent.py
+    ```
+    **Selected Output**
+    ```
+    trivia_agent: {
+     "capital": "Paris"
+    }
+    ```
+
+Click **Check my progress** to verify the objective.
+
+## Task 5. Chat with an agent via the command-line interface
+
+You can also chat with an agent in your local development environment by using the command line interface. This can be very handy for quickly debugging and testing agents as you develop them.
+
+To run an interactive session using the command line interface:
+
+1.  **Run** the following in Cloud Shell Terminal:
+
+    ```bash
+    adk run my_google_search_agent
+    ```
+    **Output**:
+    ```bash
+    Log setup complete: /tmp/agents_log/agent.20250322_010300.log
+    To access latest log: tail -F /tmp/agents_log/agent.latest.log
+    Running agent basic_search_agent, type exit to exit.
+    user:
+    ```
+2.  Input the following message:
+
+    ```sql
+    what are some new movies that have been released in the past month in India?
+    ```
+3.  **Example output (yours may be a little different)**:
+    ```applescript
+    [google_search_agent]: Here are some movies that have been released in India in the past month (approximately since April 20, 2025, given the current date of May 20, 2025):
+
+    *   **Raid 2:** Released on May 1, 2025. It's an action, crime, and thriller film starring Ajay Devgn, Vaani Kapoor, and Riteish Deshmukh.
+    *   **Kapkapiii:** Released on May 23, 2025. It is a comedy, horror film starring Shreyas Talpade and Tusshar Kapoor.
+    *   **Sister Midnight:** Released on May 23, 2025. It is a comedy, drama starring Radhika Apte.
+    ...
+    ```
+4.  When you are finished chatting with the command line interface, enter `exit` at the next user prompt to end the chat.
+
+
+# Empower ADK agents with tools
+
+
+## Objectives
+
+After this lab, you will be able to:
+
+*   Provide prebuilt Google, LangChain, or CrewAI tools to an agent
+*   Discuss the importance of structured docstrings and typing when writing functions for agent tools
+*   Write your own tool functions for an agent
+
+
+## Tool use with the Agent Developer Kit
+
+Agent Development Kit provides developers with a diverse range of tool options:
+
+*   **Pre-built Tools**: Ready-to-use functionalities such as Google Search, Code Execution, and Retrieval-Augmented Generation (RAG) tools.
+*   **Third-Party Tools**: Seamless integration of tools from external libraries like LangChain and CrewAI.
+*   **Custom Tools**: The ability to create custom tools tailored to specific requirements, by using language specific constructs and Agents-as-Tools. The SDK also provides asynchronous capabilities through Long Running Function Tools.
+
+
+## Available Pre-Built Tools from Google
+
+Google provides several useful tools for your agents. They include:
+
+**Google Search** (`google_search`): Allows the agent to perform web searches using Google Search. You simply add `google_search` to the agent's tools.
+
+**Code Execution** (`built_in_code_execution`): This tool allows the agent to execute code, to perform calculations, data manipulation, or interact with other systems programmatically. You can use the pre-built `VertexCodeInterpreter` or any code executor that implements the `BaseCodeExecutor` interface.
+
+**Retrieval** (`retrieval`): A package of tools designed to fetch information from various sources.
+
+**Vertex AI Search Tool** (`VertexAiSearchTool`): This tool integrates with Google Cloud's Vertex AI Search service to allow the agent to search through your AI Applications data stores.
+
+
+## Third-Party Tools
+
+ADK allows you to use tools available from third-party AI libraries like LangChain and CrewAI.
+
+## Task 3. Use a LangChain Tool
+
+The LangChain community has created a [large number of tool integrations](https://python.langchain.com/docs/integrations/tools/) to access many sources of data, integrate with various web products, and accomplish many things. Using community tools within ADK can save you rewriting a tool that someone has already created.
+
+1.  Use your IDE to navigate to the directory **adk_tools/langchain_tool_agent**.
+2.  Write a **.env** file to provide authentication details for this agent directory by running the following in the Cloud Shell Terminal:
+
+    ```bash
+    cd ~/adk_tools
+    cat << EOF > langchain_tool_agent/.env
+    GOOGLE_GENAI_USE_VERTEXAI=TRUE
+    GOOGLE_CLOUD_PROJECT=YOUR_GCP_PROJECT_ID
+    GOOGLE_CLOUD_LOCATION=GCP_LOCATION
+    MODEL=gemini-2.0-flash-001
+    EOF
+    ```
+3.  Copy the `.env` file to the other agent directories you will use in this lab by running the following:
+
+    ```bash
+    cp langchain_tool_agent/.env crewai_tool_agent/.env
+    cp langchain_tool_agent/.env function_tool_agent/.env
+    cp langchain_tool_agent/.env vertexai_search_tool_agent/.env
+    ```
+4.  Click on the **agent.py** file in the **langchain_tool_agent** directory.
+5.  Notice the import of the `LangchainTool` class from ADK. This is a wrapper class that allows you to use LangChain tools within Agent Development Kit.
+6.  **Add the following code** where indicated in the `agent.py` file to add the [LangChain Wikipedia tool](https://python.langchain.com/docs/integrations/tools/wikipedia/) to your agent. This will allow your agent to search for information on [Wikipedia](https://www.wikipedia.org/):
+
+    ```python
+      tools = [
+        # Use the LangchainTool wrapper...
+        LangchainTool(
+          # to pass in a LangChain tool.
+          # In this case, the WikipediaQueryRun tool,
+          # which requires the WikipediaAPIWrapper as
+          # part of the tool.
+          tool=WikipediaQueryRun(
+            api_wrapper=WikipediaAPIWrapper()
+          )
+        )
+      ]
+    ```
+7.  **Save** the file.
+8.  You will run this agent using the dev UI to see how its tools allow you to easily visualize tool requests and responses. From the **adk_tools** project directory, launch the agent with the ADK command line UI with:
+
+    ```bash
+    adk web
+    ```
+9.  Click the **http://127.0.0.1:8000** link in the Terminal output.
+10. A new browser tab will open with the ADK Dev UI.
+11. From the **Select an agent** dropdown on the left, select the **langchain_tool_agent** from the dropdown.
+12. Query the agent with:
+
+    ```bash
+    Who was Grace Hopper?
+    ```
+14. Click the agent icon next to the agent's chat bubble indicating the use of the **wikipedia** tool.
+15. Notice that the content includes a `functionCall` with the query to Wikipedia.
+16. At the top of the tab, click the **forward button** to move to the next event.
+17. On the **Request** tab, you can see the result retrieved from Wikipedia used to generate the model's response.
+18. When you are finished asking questions of this agent, close the dev UI browser tab.
+19. In the Terminal, press **CTRL + C** to stop the server.
+
+
+## Task 4. Use a CrewAI Tool
+ONLY WORKS WITH OLDER 1.2.1 ADK Ver
+
+You can similarly use [CrewAI Tools](https://github.com/crewAIInc/crewAI-tools), using a `CrewaiTool` wrapper.
+
+1.  Using your IDE navigate to the directory **adk_tools/crewai_tool_agent**.
+2.  In the **crewai_tool_agent** directory, click on the **agent.py** file.
+3.  Notice the import of the `CrewaiTool` class from ADK and the `FileWriterTool` from `crewai_tools`.
+4.  Add the following code where indicated in the `agent.py` file to add the [CrewAI File Write tool](https://docs.crewai.com/tools/filewritetool) to your agent, along with a name and description:
+
+    ```python
+      tools = [CrewaiTool(
+        name="file_writer_tool",
+        description=(
+          "Writes a file to disk when run with a"
+          "filename, content, overwrite set to 'true',"
+          "and an optional directory"
+        ),
+        tool=FileWriterTool()
+      )]
+    ```
+5.  **Save** the file.
+6.  You will run this agent using the command line interface to be familiar with it as a convenient way to test an agent quickly. In the Cloud Shell Terminal, from the **adk_tools** project directory, launch the agent with the ADK command line UI with:
+
+    ```bash
+    adk run crewai_tool_agent
+    ```
+7.  While the agent loads, it may display some warnings. You can ignore these. When you are presented the `user:` prompt, enter:
+
+    ```livecodeserver
+    Write a poem about being part of a crew, and save it as a new file crew_poem.txt
+    ```
+8.  **Output:**
+    ```bash
+    Using Tool: File Writer Tool
+    [crewai_tool_agent]: I've saved the poem to crew_poem.txt. Let me know if you need anything else. 
+    ```
+9.  Notice that the command line interface also indicates to you when a tool is being used.
+10. In the Terminal, respond to the next `user:` prompt with `exit` **to exit the command line interface**.
+11. Run the following command to print the poem from the file that the tool created:
+
+    ```bash
+    cat crew_poem.txt
+    ```
+12. **Example output (yours may be a little different):**
+    ```bash
+    United as one, we stand tall,
+    A crew of dreams, ready to enthrall.
+    Through stormy seas or skies so blue,
+    Together we conquer, me and you.
+    ```
+13. Scroll back in your Terminal history to find where you ran `adk run crewai_tool_agent`, and notice that the command line interface provided you a log file to tail. Copy and run that command to view more details of the execution:
+
+    ```bash
+    tail -F /tmp/agents_log/agent.latest.log
+    ```
+14. Press **CTRL + C** to stop tailing the log file and return to the command prompt.
+
+Click **Check my progress** to verify the objective.
+
+
+
+## Task 6. Use a function as a custom tool
+
+When pre-built tools don't fully meet specific requirements, you can create your own tools. This allows for tailored functionality, such as connecting to proprietary databases or implementing unique algorithms.
+
+The most straightforward way to create a new tool is to write a standard Python function with a [docstring formatted properly](https://google.github.io/adk-docs/tools/function-tools/#docstring) and pass it to your model as a tool. This approach offers flexibility and quick integration.
+
+When writing a function to be used as a tool, there are a few important things to keep in mind:
+
+*   **Parameters:** Your function can accept any number of parameters, each of which can be of any JSON-serializable type (e.g., string, integer, list, dictionary). It's important to avoid setting default values for parameters, as the large language model (LLM) does not currently support interpreting them.
+*   **Return type:** The preferred return type for a Python Function Tool is a dictionary. This allows you to structure the response with key-value pairs, providing context and clarity to the LLM. For example, instead of returning a numeric error code, return a dictionary with an `"error_message"` key containing a human-readable explanation. As a best practice, include a `"status"` key in your return dictionary to indicate the overall outcome (e.g., `"success"`, `"error"`, `"pending"`), providing the LLM with a clear signal about the operation's state.
+*   **Docstring:** The docstring of your function serves as the tool's description and is sent to the LLM. Therefore, a well-written and comprehensive docstring is crucial for the LLM to understand how to use the tool effectively. Clearly explain the purpose of the function, the meaning of its parameters, and the expected return values.
+
+Define a function and use it as a tool by completing the following steps:
+
+1.  Using your IDE navigate to the directory **adk_tools/function_tool_agent**.
+2.  In the **function_tool_agent** directory, click on the **agent.py** file.
+3.  Notice that the functions `get_date()` and `write_journal_entry()` have docstrings formatted properly for an ADK agent to know when and how to use them. They include:
+    *   A clear description of what each function does
+    *   an `Args:` section describing the function's input parameters with JSON-serializable types
+    *   a `Returns:` section describing what the function returns, with the preferred response type of a `dict`
+4.  To pass the function to your agent to use as a tool, add the following code where indicated in the `agent.py` file:
+
+    ```python
+      tools=[get_date, write_journal_entry]
+    ```
+5.  **Save** the file.
+6.  You will run this agent using the dev UI to see how its tools allow you to easily visualize tool requests and responses. In the Cloud Shell Terminal, from the **adk_tools** project directory, run the dev UI again with the following command (if the server is still running from before, stop the running server first with **CTRL+C**, then run the following to start it again):
+
+    ```bash
+    adk web
+    ```
+7.  Click the **http://127.0.0.1:8000** link to open the ADK Dev UI.
+8.  From the **Select an agent** dropdown on the left, select the **function_tool_agent**.
+9.  Start a conversation with the agent with:
+
+    ```bash
+    hello
+    ```
+10. The agent should prompt you about your day. **Respond with a sentence about how your day is going**, and it will write a journal entry for you.
+
+12. Close the dev UI tab.
+13. You can find your dated journal entry file in the **adk_tools** directory. 
+14. To stop the server, click on the Terminal panel and press **CTRL + C**.
+
+
+
+#### Best practices for writing functions to be used as tools include
+
+*   **Fewer Parameters are Better:** Minimize the number of parameters to reduce complexity.
+*   **Use Simple Data Types:** Favor primitive data types like `str` and `int` over custom classes when possible.
+*   **Use Meaningful Names:** The function's name and parameter names significantly influence how the LLM interprets and utilizes the tool. Choose names that clearly reflect the function's purpose and the meaning of its inputs.
+*   **Break Down Complex Functions:** Instead of a single `update_profile(profile: Profile)` function, create separate functions like `update_name(name: str)`, `update_age(age: int)`, etc.
+*   **Return status:** Include a `"status"` key in your return dictionary to indicate the overall outcome (e.g., `"success"`, `"error"`, `"pending"`) to provide the LLM a clear signal about the operation's state.
+
+# Deploy ADK agent to Agent Engine - Use Model Context Protocol (MCP) Tools with ADK Agents
+
+In this lab, you will learn how to use ADK agents as MCP clients and expose tools through a custom MCP server. You will configure the server to allow standardized communication between agents and tools. This lab shows seamless integration between LLMs and external capabilities using the Model Context Protocol.
+
+## GENAI124
+
+![Google Cloud Self-Paced Labs](https://www.cloudskillsboost.google/course_templates/1275/labs/564341#step1)
+
+## Overview
+
+In this lab, you will explore Model Context Protocol (MCP), an open standard that enables seamless integration between external services, data sources, tools, and applications. You will learn how to integrate MCP into your ADK agents, using tools provided by existing MCP servers to enhance your ADK workflows. Additionally, you will see how to expose ADK tools like `load_web_page` through a custom-built MCP server, enabling broader integration with MCP clients.
+
+**What is Model Context Protocol (MCP)**
+
+Model Context Protocol (MCP) is an open standard designed to standardize how Large Language Models (LLMs) like Gemini and Claude communicate with external applications, data sources, and tools. Think of it as a universal connection mechanism that simplifies how LLMs obtain context, execute actions, and interact with various systems.
+
+MCP follows a client-server architecture, defining how data (resources), interactive templates (prompts), and actionable functions (tools) are exposed by an MCP server and consumed by an MCP client (which could be an LLM host application or an AI agent).
+
+This Lab covers two primary integration patterns:
+
+*   Using Existing MCP Servers within ADK: An ADK agent acts as an MCP client, leveraging tools provided by external MCP servers.
+*   Exposing ADK Tools via an MCP Server: Building an MCP server that wraps ADK tools, making them accessible to any MCP client.
+
+## Objectives
+
+In this lab, you will learn how to:
+
+*   Use an ADK agent as an MCP client to interact with tools from existing MCP servers.
+*   Configure and deploy your own MCP server to expose ADK tools to other clients.
+*   Connect ADK agents with external tools through standardized MCP communication.
+*   Enable seamless interaction between LLMs and tools using Model Context Protocol.
+
+## Setup and requirements
+
+### Before you click the Start Lab button
+
+Read these instructions. Labs are timed and you cannot pause them. The timer, which starts when you click **Start Lab**, shows how long Google Cloud resources will be made available to you.
+
+This Qwiklabs hands-on lab lets you do the lab activities yourself in a real cloud environment, not in a simulation or demo environment. It does so by giving you new, temporary credentials that you use to sign in and access Google Cloud for the duration of the lab.
+
+### What you need
+
+To complete this lab, you need:
+
+*   Access to a standard internet browser (Chrome browser recommended).
+*   Time to complete the lab.
+
+**Note:** If you already have your own personal Google Cloud account or project, do not use it for this lab.
+
+**Note:** If you are using a Pixelbook, open an Incognito window to run this lab.
+
+### How to start your lab and sign in to the Google Cloud console
+
+1.  Click the **Start Lab** button. If you need to pay for the lab, a dialog opens for you to select your payment method.
+    On the left is the Lab Details pane with the following:
+    *   The Open Google Cloud console button
+    *   Time remaining
+    *   The temporary credentials that you must use for this lab
+    *   Other information, if needed, to step through this lab
+2.  Click **Open Google Cloud console** (or right-click and select **Open Link in Incognito Window** if you are running the Chrome browser).
+
+    The lab spins up resources, and then opens another tab that shows the Sign in page.
+
+    **Tip:** Arrange the tabs in separate windows, side-by-side.
+
+    > **Note:** If you see the **Choose an account** dialog, click **Use Another Account**.
+3.  If necessary, copy the **Username** below and paste it into the **Sign in** dialog.
+
+    ```bash
+    "Username"
+    ```
+
+    You can also find the Username in the Lab Details pane.
+4.  Click **Next**.
+5.  Copy the **Password** below and paste it into the **Welcome** dialog.
+
+    ```bash
+    "Password"
+    ```
+
+    You can also find the Password in the Lab Details pane.
+6.  Click **Next**.
+    > **Important:** You must use the credentials the lab provides you. Do not use your Google Cloud account credentials.
+    > **Note:** Using your own Google Cloud account for this lab may incur extra charges.
+7.  Click through the subsequent pages:
+    *   Accept the terms and conditions.
+    *   Do not add recovery options or two-factor authentication (because this is a temporary account).
+    *   Do not sign up for free trials.
+
+    After a few moments, the Google Cloud console opens in this tab.
+
+    > **Note:** To access Google Cloud products and services, click the **Navigation menu** or type the service or product name in the **Search** field.
+
+## Task 1. Install ADK and set up your environment
+
+> **Note:** Using an Incognito browser window is recommended for most Qwiklabs to avoid confusion between your Qwiklabs student account and other accounts logged into Google Cloud. If you are using Chrome, the easiest way to accomplish this is to close any Incognito windows, then right click on the **Open Google Cloud console** button at the top of this lab and select **Open link in Incognito window**.
+
+### Enable recommended APIs
+
+1.  In this lab environment, the **Vertex AI API, Routes API and Directions API have been enabled for you**.
+
+### Prepare a Cloud Shell Editor tab
+
+1.  With your Google Cloud console window selected, open Cloud Shell by pressing the **G** key and then the **S** key on your keyboard. Alternatively, you can click the Activate Cloud Shell button (![Activate Cloud Shell](https://www.cloudskillsboost.google/course_templates/1275/labs/564341#step4)) in the upper right of the Cloud console.
+2.  Click **Continue**.
+3.  When prompted to authorize Cloud Shell, click **Authorize**.
+4.  In the upper right corner of the Cloud Shell Terminal panel, click the **Open in new window** button <button class="js-img-container" aria-haspopup="true"><img alt="Open in new window button" src="https://www.cloudskillsboost.google/focuses/126143?catalog_rank=%7B%22rank%22%3A1%2C%22num_filters%22%3A0%2C%22has_search%22%3Atrue%7D&parent=catalog&search_id=49852970#step4"></button>.
+5.  In the Cloud Shell Terminal, enter the following to open the Cloud Shell Editor to your home directory:
+
+    ```bash
+    cloudshell workspace ~
+    ```
+
+6.  Close any additional tutorial or Gemini panels that appear on the right side of the screen to save more of your window for your code editor.
+7.  Throughout the rest of this lab, you can work in this window as your IDE with the Cloud Shell Editor and Cloud Shell Terminal.
+
+### Download and install ADK and code samples for this lab
+
+1.  **Install ADK** by running the following command in the Cloud Shell Terminal.
+
+    > **Note:** You will specify the version to ensure that the version of ADK that you install corresponds to the version used in this lab. You can view the latest version number and release notes at the [adk-python repo](https://github.com/google/adk-python/releases).
+    ```bash
+    sudo python3 -m pip install google-adk==1.5.0
+    ```
+2.  Paste the following commands into the Cloud Shell Terminal to copy a file from a Cloud Storage bucket, and unzip it, creating a project directory with code for this lab:
+
+    ```bash
+    gcloud storage cp gs://YOUR_GCP_PROJECT_ID-bucket/adk_mcp_tools.zip .
+    unzip adk_mcp_tools.zip
+    ```
+3.  Install additional lab requirements with:
+
+    ```bash
+    python3 -m pip install -r adk_mcp_tools/requirements.txt
+    ```
+
+Click **Check my progress** to verify the objective.
+
+## Task 2. Using Google Maps MCP server with ADK agents (ADK as an MCP client) in adk web
+
+This section demonstrates how to integrate tools from an external Google Maps MCP server into your ADK agents. This is the most common integration pattern when your ADK agent needs to use capabilities provided by an existing service that exposes an MCP interface. You will see how the `MCPToolset` class can be directly added to your agent's `tools` list, enabling seamless connection to an MCP server, discovery of its tools, and making them available for your agent to use. These examples primarily focus on interactions within the `adk web` development environment.
+
+### MCP Toolset
+
+The `MCPToolset` class is ADK's primary mechanism for integrating tools from an MCP server. When you include an `MCPToolset` instance in your agent's `tools` list, it automatically handles the interaction with the specified MCP server. Here's how it works:
+
+*   **Connection Management**: On initialization, `MCPToolset` establishes and manages the connection to the MCP server. This can be a local server process (using `StdioServerParameters` for communication over standard input/output) or a remote server (using `SseServerParams` for Server-Sent Events). The toolset also handles the graceful shutdown of this connection when the agent or application terminates.
+*   **Tool Discovery & Adaptation**: Once connected, `MCPToolset` queries the MCP server for its available tools (via the `list_tools` MCP method). It then converts the schemas of these discovered MCP tools into ADK-compatible `BaseTool` instances.
+*   **Exposure to Agent**: These adapted tools are then made available to your `LlmAgent` as if they were native ADK tools.
+*   **Proxying Tool Calls**: When your `LlmAgent` decides to use one of these tools, `MCPToolset` transparently proxies the call (using the `call_tool` MCP method) to the MCP server, sends the necessary arguments, and returns the server's response back to the agent.
+*   **Filtering (Optional)**: You can use the `tool_filter` parameter when creating an MCPToolset to select a specific subset of tools from the MCP server, rather than exposing all of them to your agent.
+
+### Get API key and Enable APIs
+
+In this sub-section, you will generate a new API key named **GOOGLE_MAPS_API_KEY**.
+
+1.  **Open the browser tab displaying the Google Cloud Console** (not your Cloud Shell Editor).
+2.  You can **close the Cloud Shell Terminal pane** on this browser tab for more console area.
+3.  Search for **Credentials** in the search bar at the top of the page. Select it from the results.
+    ![Credentials Page](https://www.cloudskillsboost.google/focuses/126143?catalog_rank=%7B%22rank%22%3A1%2C%22num_filters%22%3A0%2C%22has_search%22%3Atrue%7D&parent=catalog&search_id=49852970#step4)
+4.  On the **Credentials** page, click **+ Create Credentials** at the top of the page, then select **API key**.
+    The **API key created** dialog will display your newly created API key. Be sure to save this key locally for later use in the lab.
+5.  Click **Close** on the dialog box.
+    Your newly created key will be named **API Key 1** by default. Select the key, rename it to **GOOGLE_MAPS_API_KEY**, and click **Save**.
+    ![Google Map Key](https://www.cloudskillsboost.google/focuses/126143?catalog_rank=%7B%22rank%22%3A1%2C%22num_filters%22%3A0%2C%22has_search%22%3Atrue%7D&parent=catalog&search_id=49852970#step4)
+
+### Define your Agent with an MCP Toolset for Google Maps
+
+In this sub-section, you will configure your agent to use the `MCPToolset` for Google Maps, enabling it to seamlessly provide directions and location-based information.
+
+1.  In the Cloud Shell Editor's file explorer pane, find the **adk_mcp_tools** folder. Click it to toggle it open.
+2.  Navigate to the directory **adk_mcp_tools/google_maps_mcp_agent**.
+3.  Paste the following command in a plain text file, then update the `YOUR_ACTUAL_API_KEY` value with the Google Maps API key you generated and saved in a previous step:
+
+    ```bash
+    cd ~/adk_mcp_tools
+    cat << EOF > google_maps_mcp_agent/.env
+    GOOGLE_GENAI_USE_VERTEXAI=TRUE
+    GOOGLE_CLOUD_PROJECT=Project
+    GOOGLE_CLOUD_LOCATION=Region
+    GOOGLE_MAPS_API_KEY="YOUR_ACTUAL_API_KEY"
+    EOF
+    ```
+4.  Copy and paste the updated command to Cloud Shell Terminal to run it and write a **.env** file which will provide authentication details for this agent directory.
+5.  Copy the `.env` file to the other agent directory you will use in this lab by running the following command:
+
+    ```bash
+    cp google_maps_mcp_agent/.env adk_mcp_server/.env
+    ```
+6.  Click on the **agent.py** file in the **google_maps_mcp_agent** directory.
+7.  Notice the import of the `MCPToolset` class from ADK, along with `StdioConnectionParams` and `StdioServerParameters`. These are used to connect to an MCP server.
+8.  Add the following code where indicated in the `agent.py` file to add the Google Maps tool to your agent:
+
+    ```python
+      tools=[
+        MCPToolset(
+        connection_params=StdioConnectionParams(
+          server_params=StdioServerParameters(
+            command="python3", # Command to run your MCP server script
+            args=[
+              "-y",
+              "@modelcontextprotocol/server-google-maps",
+            ],
+            env={
+              "GOOGLE_MAPS_API_KEY": google_maps_api_key
+            }
+          ),
+          timeout=15,
+          ),
+        )
+      ],
+    ```
+9.  **Save** the file.
+10. From the **adk_mcp_tools** project directory, **launch the Agent Development Kit Dev UI** with the following command:
+
+    ```bash
+    adk web
+    ```
+11. **Output:**
+    ```bash
+    INFO:   Started server process [2434]
+    INFO:   Waiting for application startup.
+    +----------------------------------------------------+
+    | ADK Web Server started                             |
+    |                                                    |
+    | For local testing, access at http://localhost:8000.   |
+    +----------------------------------------------------+
+
+    INFO:   Application startup complete.
+    INFO:   Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+    ```
+12. To view the web interface in a new tab, click the **http://127.0.0.1:8000** link in the Terminal output.
+13. A new browser tab will open with the ADK Dev UI. From the **Select an agent** dropdown on the left, select the **google_maps_mcp_agent** from the dropdown.
+14. Query the agent with:
+
+    ```bash
+    Get directions from GooglePlex to SFO.
+    ```
+    **Output:**
+    ![Agent Response](https://www.cloudskillsboost.google/focuses/564341?catalog_rank=%7B%22rank%22%3A1%2C%22num_filters%22%3A0%2C%22has_search%22%3Atrue%7D&parent=catalog&search_id=49852970#step12)
+15. **Click the agent icon** next to the agent's chat bubble with a lightning bolt, which indicates a function call. This will open up the Event inspector for this event:
+    ![ADK Tool Call](https://www.cloudskillsboost.google/focuses/564341?catalog_rank=%7B%22rank%22%3A1%2C%22num_filters%22%3A0%2C%22has_search%22%3Atrue%7D&parent=catalog&search_id=49852970#step12)
+16. **Notice that agent graph indicates several different tools**, identified by the wrench emoji (🔧). Even though you only imported one `MCPToolset`, that tool set came with the different tools you see listed here, such as `maps_place_details` and `maps_directions`.
+    ![The agent graph indicates several tools](https://www.cloudskillsboost.google/focuses/564341?catalog_rank=%7B%22rank%22%3A1%2C%22num_filters%22%3A0%2C%22has_search%22%3Atrue%7D&parent=catalog&search_id=49852970#step12)
+17. On the **Request** tab, you can see the structure of the request. You can use the arrows at the top of the Event inspector to browse the agent's thoughts, function calls, and responses.
+18. When you are finished asking questions of this agent, close the dev UI browser tab.
+19. In the Terminal, press **CTRL + C** to stop the server.
+
+## Task 3. Building an MCP server with ADK tools (MCP server exposing ADK)
+
+In this section, you'll learn how to expose the ADK `load_web_page` tool through a custom-built MCP server. This pattern allows you to wrap existing ADK tools and make them accessible to any standard MCP client application.
+
+### Create the MCP Server Script and Implement Server Logic
+
+1.  In the Cloud Shell Editor's file explorer pane, find the **adk_mcp_tools** folder. Click it to toggle it open.
+2.  Navigate to the directory **adk_mcp_tools/adk_mcp_server**.
+3.  A Python file named **adk_server.py** has been prepared and commented for you. **Take some time to review that file**, reading the comments to understand how the code wraps a tool and serves it as an MCP server. Notice how it allows MCP clients to list available tools as well as invoke the ADK tool asynchronously, handling requests and responses in an MCP-compliant format.
+
+### Test the Custom MCP Server with an ADK Agent
+
+1.  In the Cloud Shell Editor, click on the **agent.py** file in the **adk_mcp_server** directory.
+2.  Update the path to your **adk_server.py** file.
+
+    ```bash
+    cd ~/adk_mcp_tools
+    cat << EOF > adk_mcp_server/.env
+    GOOGLE_GENAI_USE_VERTEXAI=TRUE
+    GOOGLE_CLOUD_PROJECT=Project
+    GOOGLE_CLOUD_LOCATION=Region
+    GOOGLE_MAPS_API_KEY="YOUR_ACTUAL_API_KEY"
+    EOF
+    ```
+3.  Copy and paste the updated command to Cloud Shell Terminal to run it and write a **.env** file which will provide authentication details for this agent directory.
+4.  Copy the `.env` file to the other agent directory you will use in this lab by running the following command:
+
+    ```bash
+    cp google_maps_mcp_agent/.env adk_mcp_server/.env
+    ```
+5.  Next, add the following code where indicated in the `agent.py` file to add the ADK `load_web_page` tool to your agent:
+
+    ```python
+      tools=[
+        MCPToolset(
+        connection_params=StdioConnectionParams(
+          server_params=StdioServerParameters(
+            command="python3", # Command to run your MCP server script
+            args=[
+              PATH_TO_YOUR_MCP_SERVER_SCRIPT, # Argument is the path to the script
+            ],
+            env={
+              "GOOGLE_MAPS_API_KEY": google_maps_api_key
+            }
+          ),
+          timeout=15,
+          ),
+        )
+      ],
+    ```
+6.  **Save** the file.
+7.  To run the MCP server, start the `adk_server.py` script by running the following command in Cloud Shell Terminal:
+
+    ```bash
+    python3 ~/adk_mcp_tools/adk_mcp_server/adk_server.py
+    ```
+8.  **Output**:
+    ```bash
+    INFO: Started server process [2434]
+    INFO: Waiting for application startup.
+    +----------------------------------------------------+
+    | ADK Web Server started                             |
+    |                                                    |
+    | For local testing, access at http://localhost:8000.   |
+    +----------------------------------------------------+
+
+    INFO: Application startup complete.
+    INFO: Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+    ```
+9.  Open a new Cloud Shell Terminal tab by clicking the <button class="js-img-container" aria-haspopup="true"><img alt="add-session-button" src="https://www.cloudskillsboost.google/focuses/126143?catalog_rank=%7B%22rank%22%3A1%2C%22num_filters%22%3A0%2C%22has_search%22%3Atrue%7D&parent=catalog&search_id=49852970#step12"></button> button at the top of the Cloud Shell Terminal window.
+10. In the Cloud Shell Terminal, from the **adk_mcp_tools** project directory, launch the **Agent Development Kit Dev UI** with the following command:
+
+    ```bash
+    adk web
+    ```
+11. Click the **http://127.0.0.1:8000** link to open the ADK Dev UI.
+12. From the **Select an agent** dropdown on the left, select the **adk_mcp_server** from the dropdown.
+13. Query the agent with:
+
+    ```bash
+    Load the content from https://example.com.
+    ```
+14. **Output**:
+    ![Agent Response](https://www.cloudskillsboost.google/focuses/564341?catalog_rank=%7B%22rank%22%3A1%2C%22num_filters%22%3A0%2C%22has_search%22%3Atrue%7D&parent=catalog&search_id=49852970#step7)
+15. What happens here:
+    *   The ADK agent (`web_reader_mcp_client_agent`) uses the `MCPToolset` to connect to your `adk_server.py`.
+    *   The MCP server will receive the `call_tool` request, execute the ADK `load_web_page` tool, and return the result.
+    *   The ADK agent will then relay this information. You should see logs from both the ADK Web UI (and its terminal) and from your `adk_server.py` terminal in the Cloud Shell Terminal tab where it is running.
+16. This demonstrates that ADK tools can be encapsulated within an MCP server, making them accessible to a broad range of MCP-compliant clients including ADK agents.
+
+
+
+## Task 6. Preview a multi-agent example
+
+You will learn more about building multi-agent systems in the lab *Build multi-agent systems with ADK*, but because multi-agent capabilities are core to the Agent Development Kit experience, you can explore one multi-agent system now.
+
+This agentic system evaluates and improves the factual grounding of responses generated by LLMs. It includes:
+- a `critic_agent` to serve as an automated fact-checker
+- a `reviser_agent` to rewrite responses if needed to correct inaccuracies based on verified findings
+
+To explore this agent:
+
+1.  To explore this multi-agent system's code, use the Cloud Shell Editor file explorer to navigate to the directory **adk_project/llm_auditor**.
+2.  Within the **llm_auditor** directory, select the **agent.py** file.
+3.  Here are a few things to notice about this multi-agent example:
+    *   Notice the import and use of the `SequentialAgent` class. This is an example of a **workflow class** which passes control of the conversation from one agent to the next in order without awaiting a user turn in-between. When you run the agent, you will see responses from both the `critic_agent` and the `reviser_agent`, in that order, without waiting for a user turn.
+    *   Notice that these sub-agents are each imported from their own directories within a `sub_agents` directory.
+    *   In the sub-agents' directories, you will see the `__init__.py` and `agent.py` files like those you explored in the directory structure earlier, along with a `prompt.py` file, which provides a dedicated place for a complete, well-structured prompt to be stored and edited before it is imported into the `agent.py` file.
+4.  Create a .env file for this agent and launch the dev UI again by running the following in the Cloud Shell Terminal:
+
+    ```bash
+    cd ~/adk_project
+    cat << EOF > llm_auditor/.env
+    GOOGLE_GENAI_USE_VERTEXAI=TRUE
+    GOOGLE_CLOUD_PROJECT=qwiklabs-gcp-00-97660de20650
+    GOOGLE_CLOUD_LOCATION=us-central1
+    MODEL=gemini-2.0-flash-001
+    EOF
+
+    adk web
+    ```
+    > **Note:** If you did not shut down your previous `adk web` session, the default port of 8000 will be blocked, but you can launch the Dev UI with a new port by using `adk web --port 8001`, for example.
+5.  Click the **http://127.0.0.1:8000** link in the Terminal output. A new browser tab will open with the ADK Dev UI.
+6.  From the **Select an agent** dropdown on the left, select **llm_auditor**.
+7.  Start the conversation with the following false statement:
+
+    ```smali
+    Double check this: Earth is further away from the Sun than Mars.
+    ```
+8.  You should see two responses from the agent in the chat area:
+    *   First, a detailed response from the `critic_agent` checking the truthfulness of the statement based on fact-checking with Google Search.
+    *   Second, a short revised statement from the `reviser_agent` with a corrected version of your false input statement, for example, "Earth is closer to the Sun than Mars."
+9.  Next to each response, click on the agent icon (![agent_icon](https://www.cloudskillsboost.google/focuses/126142?catalog_rank=%7B%22rank%22%3A3%2C%22num_filters%22%3A0%2C%22has_search%22%3Atrue%7D&parent=catalog&search_id=49852970#step11)) to open the event panel for that response (or find the corresponding numbered event on the Events panel and select it). At the top of the event view, there is a graph that visualizes the relationships between the agents and tools in this multi-agent system. The agent responsible for this response will be highlighted.
+10. Feel free to explore the code further or ask for other fact-checking examples in the dev UI. Another example you can try is:
+
+    ```livecodeserver
+    Q: Why is the sky blue? A: Because the sky reflects the color of the ocean.
+    ```
+11. If you would like to reset the conversation, use the **+ New Session** link at the top right of the ADK Dev UI to restart the conversation.
+12. When you are finished asking questions of this agent, close the browser tab and press **CTRL + C** in the Terminal to stop the server.
+
+Click **Check my progress** to verify the objective.
+
+#### Human-in-the-loop pattern
+
+Even though this example uses a `SequentialAgent` workflow agent, you can think of this pattern as a human-in-the-loop pattern. When the `SequentialAgent` ends its sequence, the conversation goes back to its parent, the `llm_auditor` in this example, to get a new input turn from the user and then pass the conversation back around to the other agents.
