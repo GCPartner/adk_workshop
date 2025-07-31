@@ -454,9 +454,8 @@ Define a function and use it as a tool by completing the following steps:
 
 In this lab, you will learn how to use ADK agents as MCP clients and expose tools through a custom MCP server. You will configure the server to allow standardized communication between agents and tools. This lab shows seamless integration between LLMs and external capabilities using the Model Context Protocol.
 
-## GENAI124
 
-![Google Cloud Self-Paced Labs](https://www.cloudskillsboost.google/course_templates/1275/labs/564341#step1)
+
 
 ## Overview
 
@@ -482,111 +481,6 @@ In this lab, you will learn how to:
 *   Connect ADK agents with external tools through standardized MCP communication.
 *   Enable seamless interaction between LLMs and tools using Model Context Protocol.
 
-## Setup and requirements
-
-### Before you click the Start Lab button
-
-Read these instructions. Labs are timed and you cannot pause them. The timer, which starts when you click **Start Lab**, shows how long Google Cloud resources will be made available to you.
-
-This Qwiklabs hands-on lab lets you do the lab activities yourself in a real cloud environment, not in a simulation or demo environment. It does so by giving you new, temporary credentials that you use to sign in and access Google Cloud for the duration of the lab.
-
-### What you need
-
-To complete this lab, you need:
-
-*   Access to a standard internet browser (Chrome browser recommended).
-*   Time to complete the lab.
-
-**Note:** If you already have your own personal Google Cloud account or project, do not use it for this lab.
-
-**Note:** If you are using a Pixelbook, open an Incognito window to run this lab.
-
-### How to start your lab and sign in to the Google Cloud console
-
-1.  Click the **Start Lab** button. If you need to pay for the lab, a dialog opens for you to select your payment method.
-    On the left is the Lab Details pane with the following:
-    *   The Open Google Cloud console button
-    *   Time remaining
-    *   The temporary credentials that you must use for this lab
-    *   Other information, if needed, to step through this lab
-2.  Click **Open Google Cloud console** (or right-click and select **Open Link in Incognito Window** if you are running the Chrome browser).
-
-    The lab spins up resources, and then opens another tab that shows the Sign in page.
-
-    **Tip:** Arrange the tabs in separate windows, side-by-side.
-
-    > **Note:** If you see the **Choose an account** dialog, click **Use Another Account**.
-3.  If necessary, copy the **Username** below and paste it into the **Sign in** dialog.
-
-    ```bash
-    "Username"
-    ```
-
-    You can also find the Username in the Lab Details pane.
-4.  Click **Next**.
-5.  Copy the **Password** below and paste it into the **Welcome** dialog.
-
-    ```bash
-    "Password"
-    ```
-
-    You can also find the Password in the Lab Details pane.
-6.  Click **Next**.
-    > **Important:** You must use the credentials the lab provides you. Do not use your Google Cloud account credentials.
-    > **Note:** Using your own Google Cloud account for this lab may incur extra charges.
-7.  Click through the subsequent pages:
-    *   Accept the terms and conditions.
-    *   Do not add recovery options or two-factor authentication (because this is a temporary account).
-    *   Do not sign up for free trials.
-
-    After a few moments, the Google Cloud console opens in this tab.
-
-    > **Note:** To access Google Cloud products and services, click the **Navigation menu** or type the service or product name in the **Search** field.
-
-## Task 1. Install ADK and set up your environment
-
-> **Note:** Using an Incognito browser window is recommended for most Qwiklabs to avoid confusion between your Qwiklabs student account and other accounts logged into Google Cloud. If you are using Chrome, the easiest way to accomplish this is to close any Incognito windows, then right click on the **Open Google Cloud console** button at the top of this lab and select **Open link in Incognito window**.
-
-### Enable recommended APIs
-
-1.  In this lab environment, the **Vertex AI API, Routes API and Directions API have been enabled for you**.
-
-### Prepare a Cloud Shell Editor tab
-
-1.  With your Google Cloud console window selected, open Cloud Shell by pressing the **G** key and then the **S** key on your keyboard. Alternatively, you can click the Activate Cloud Shell button (![Activate Cloud Shell](https://www.cloudskillsboost.google/course_templates/1275/labs/564341#step4)) in the upper right of the Cloud console.
-2.  Click **Continue**.
-3.  When prompted to authorize Cloud Shell, click **Authorize**.
-4.  In the upper right corner of the Cloud Shell Terminal panel, click the **Open in new window** button <button class="js-img-container" aria-haspopup="true"><img alt="Open in new window button" src="https://www.cloudskillsboost.google/focuses/126143?catalog_rank=%7B%22rank%22%3A1%2C%22num_filters%22%3A0%2C%22has_search%22%3Atrue%7D&parent=catalog&search_id=49852970#step4"></button>.
-5.  In the Cloud Shell Terminal, enter the following to open the Cloud Shell Editor to your home directory:
-
-    ```bash
-    cloudshell workspace ~
-    ```
-
-6.  Close any additional tutorial or Gemini panels that appear on the right side of the screen to save more of your window for your code editor.
-7.  Throughout the rest of this lab, you can work in this window as your IDE with the Cloud Shell Editor and Cloud Shell Terminal.
-
-### Download and install ADK and code samples for this lab
-
-1.  **Install ADK** by running the following command in the Cloud Shell Terminal.
-
-    > **Note:** You will specify the version to ensure that the version of ADK that you install corresponds to the version used in this lab. You can view the latest version number and release notes at the [adk-python repo](https://github.com/google/adk-python/releases).
-    ```bash
-    sudo python3 -m pip install google-adk==1.5.0
-    ```
-2.  Paste the following commands into the Cloud Shell Terminal to copy a file from a Cloud Storage bucket, and unzip it, creating a project directory with code for this lab:
-
-    ```bash
-    gcloud storage cp gs://YOUR_GCP_PROJECT_ID-bucket/adk_mcp_tools.zip .
-    unzip adk_mcp_tools.zip
-    ```
-3.  Install additional lab requirements with:
-
-    ```bash
-    python3 -m pip install -r adk_mcp_tools/requirements.txt
-    ```
-
-Click **Check my progress** to verify the objective.
 
 ## Task 2. Using Google Maps MCP server with ADK agents (ADK as an MCP client) in adk web
 
@@ -606,21 +500,18 @@ The `MCPToolset` class is ADK's primary mechanism for integrating tools from an 
 
 In this sub-section, you will generate a new API key named **GOOGLE_MAPS_API_KEY**.
 
-1.  **Open the browser tab displaying the Google Cloud Console** (not your Cloud Shell Editor).
-2.  You can **close the Cloud Shell Terminal pane** on this browser tab for more console area.
+1.  **Open the browser tab displaying the Google Cloud Console** 
 3.  Search for **Credentials** in the search bar at the top of the page. Select it from the results.
-    ![Credentials Page](https://www.cloudskillsboost.google/focuses/126143?catalog_rank=%7B%22rank%22%3A1%2C%22num_filters%22%3A0%2C%22has_search%22%3Atrue%7D&parent=catalog&search_id=49852970#step4)
 4.  On the **Credentials** page, click **+ Create Credentials** at the top of the page, then select **API key**.
     The **API key created** dialog will display your newly created API key. Be sure to save this key locally for later use in the lab.
 5.  Click **Close** on the dialog box.
     Your newly created key will be named **API Key 1** by default. Select the key, rename it to **GOOGLE_MAPS_API_KEY**, and click **Save**.
-    ![Google Map Key](https://www.cloudskillsboost.google/focuses/126143?catalog_rank=%7B%22rank%22%3A1%2C%22num_filters%22%3A0%2C%22has_search%22%3Atrue%7D&parent=catalog&search_id=49852970#step4)
 
 ### Define your Agent with an MCP Toolset for Google Maps
 
 In this sub-section, you will configure your agent to use the `MCPToolset` for Google Maps, enabling it to seamlessly provide directions and location-based information.
 
-1.  In the Cloud Shell Editor's file explorer pane, find the **adk_mcp_tools** folder. Click it to toggle it open.
+1.  Using your IDE find the **adk_mcp_tools** folder. Click it to toggle it open.
 2.  Navigate to the directory **adk_mcp_tools/google_maps_mcp_agent**.
 3.  Paste the following command in a plain text file, then update the `YOUR_ACTUAL_API_KEY` value with the Google Maps API key you generated and saved in a previous step:
 
@@ -633,7 +524,7 @@ In this sub-section, you will configure your agent to use the `MCPToolset` for G
     GOOGLE_MAPS_API_KEY="YOUR_ACTUAL_API_KEY"
     EOF
     ```
-4.  Copy and paste the updated command to Cloud Shell Terminal to run it and write a **.env** file which will provide authentication details for this agent directory.
+4.  Copy and paste the updated command to run it and write a **.env** file which will provide authentication details for this agent directory.
 5.  Copy the `.env` file to the other agent directory you will use in this lab by running the following command:
 
     ```bash
@@ -688,12 +579,11 @@ In this sub-section, you will configure your agent to use the `MCPToolset` for G
     ```bash
     Get directions from GooglePlex to SFO.
     ```
-    **Output:**
-    ![Agent Response](https://www.cloudskillsboost.google/focuses/564341?catalog_rank=%7B%22rank%22%3A1%2C%22num_filters%22%3A0%2C%22has_search%22%3Atrue%7D&parent=catalog&search_id=49852970#step12)
+   
 15. **Click the agent icon** next to the agent's chat bubble with a lightning bolt, which indicates a function call. This will open up the Event inspector for this event:
-    ![ADK Tool Call](https://www.cloudskillsboost.google/focuses/564341?catalog_rank=%7B%22rank%22%3A1%2C%22num_filters%22%3A0%2C%22has_search%22%3Atrue%7D&parent=catalog&search_id=49852970#step12)
+
 16. **Notice that agent graph indicates several different tools**, identified by the wrench emoji (🔧). Even though you only imported one `MCPToolset`, that tool set came with the different tools you see listed here, such as `maps_place_details` and `maps_directions`.
-    ![The agent graph indicates several tools](https://www.cloudskillsboost.google/focuses/564341?catalog_rank=%7B%22rank%22%3A1%2C%22num_filters%22%3A0%2C%22has_search%22%3Atrue%7D&parent=catalog&search_id=49852970#step12)
+
 17. On the **Request** tab, you can see the structure of the request. You can use the arrows at the top of the Event inspector to browse the agent's thoughts, function calls, and responses.
 18. When you are finished asking questions of this agent, close the dev UI browser tab.
 19. In the Terminal, press **CTRL + C** to stop the server.
@@ -704,30 +594,14 @@ In this section, you'll learn how to expose the ADK `load_web_page` tool through
 
 ### Create the MCP Server Script and Implement Server Logic
 
-1.  In the Cloud Shell Editor's file explorer pane, find the **adk_mcp_tools** folder. Click it to toggle it open.
+1.  In your IDE, find the **adk_mcp_tools** folder. Click it to toggle it open.
 2.  Navigate to the directory **adk_mcp_tools/adk_mcp_server**.
 3.  A Python file named **adk_server.py** has been prepared and commented for you. **Take some time to review that file**, reading the comments to understand how the code wraps a tool and serves it as an MCP server. Notice how it allows MCP clients to list available tools as well as invoke the ADK tool asynchronously, handling requests and responses in an MCP-compliant format.
 
 ### Test the Custom MCP Server with an ADK Agent
 
-1.  In the Cloud Shell Editor, click on the **agent.py** file in the **adk_mcp_server** directory.
+1.  Click on the **agent.py** file in the **adk_mcp_server** directory.
 2.  Update the path to your **adk_server.py** file.
-
-    ```bash
-    cd ~/adk_mcp_tools
-    cat << EOF > adk_mcp_server/.env
-    GOOGLE_GENAI_USE_VERTEXAI=TRUE
-    GOOGLE_CLOUD_PROJECT=Project
-    GOOGLE_CLOUD_LOCATION=Region
-    GOOGLE_MAPS_API_KEY="YOUR_ACTUAL_API_KEY"
-    EOF
-    ```
-3.  Copy and paste the updated command to Cloud Shell Terminal to run it and write a **.env** file which will provide authentication details for this agent directory.
-4.  Copy the `.env` file to the other agent directory you will use in this lab by running the following command:
-
-    ```bash
-    cp google_maps_mcp_agent/.env adk_mcp_server/.env
-    ```
 5.  Next, add the following code where indicated in the `agent.py` file to add the ADK `load_web_page` tool to your agent:
 
     ```python
@@ -749,28 +623,16 @@ In this section, you'll learn how to expose the ADK `load_web_page` tool through
       ],
     ```
 6.  **Save** the file.
-7.  To run the MCP server, start the `adk_server.py` script by running the following command in Cloud Shell Terminal:
+7.  To run the MCP server, start the `adk_server.py` script by running the following command in Terminal:
 
     ```bash
     python3 ~/adk_mcp_tools/adk_mcp_server/adk_server.py
     ```
-8.  **Output**:
-    ```bash
-    INFO: Started server process [2434]
-    INFO: Waiting for application startup.
-    +----------------------------------------------------+
-    | ADK Web Server started                             |
-    |                                                    |
-    | For local testing, access at http://localhost:8000.   |
-    +----------------------------------------------------+
 
-    INFO: Application startup complete.
-    INFO: Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
-    ```
-9.  Open a new Cloud Shell Terminal tab by clicking the <button class="js-img-container" aria-haspopup="true"><img alt="add-session-button" src="https://www.cloudskillsboost.google/focuses/126143?catalog_rank=%7B%22rank%22%3A1%2C%22num_filters%22%3A0%2C%22has_search%22%3Atrue%7D&parent=catalog&search_id=49852970#step12"></button> button at the top of the Cloud Shell Terminal window.
-10. In the Cloud Shell Terminal, from the **adk_mcp_tools** project directory, launch the **Agent Development Kit Dev UI** with the following command:
+9.  Open a Terminal and from the **adk_mcp_tools** project directory, launch the **Agent Development Kit Dev UI** with the following command:
 
     ```bash
+    cd ~/adk_mcp_tools
     adk web
     ```
 11. Click the **http://127.0.0.1:8000** link to open the ADK Dev UI.
@@ -780,8 +642,7 @@ In this section, you'll learn how to expose the ADK `load_web_page` tool through
     ```bash
     Load the content from https://example.com.
     ```
-14. **Output**:
-    ![Agent Response](https://www.cloudskillsboost.google/focuses/564341?catalog_rank=%7B%22rank%22%3A1%2C%22num_filters%22%3A0%2C%22has_search%22%3Atrue%7D&parent=catalog&search_id=49852970#step7)
+
 15. What happens here:
     *   The ADK agent (`web_reader_mcp_client_agent`) uses the `MCPToolset` to connect to your `adk_server.py`.
     *   The MCP server will receive the `call_tool` request, execute the ADK `load_web_page` tool, and return the result.
