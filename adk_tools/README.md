@@ -218,7 +218,7 @@ In this sub-section, you will configure your agent to use the `MCPToolset` for G
 3.  Notice the import of the `MCPToolset` class from ADK, along with `StdioConnectionParams` and `StdioServerParameters`. These are used to connect to an MCP server.
 4.  Add the following code where indicated in the `agent.py` file to add the Google Maps tool to your agent:
 
-    ```python
+    ```
     tools=[
         MCPToolset(
         connection_params=StdioConnectionParams(
