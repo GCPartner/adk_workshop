@@ -42,14 +42,6 @@ In this part of the workshop, you will create agent that can use variou tools. Y
 
 python3 -m pip install google-adk==1.6.1
 
-echo 'export PATH="$PATH:$HOME/.local/bin"' >> ~/.bashrc
-
-source ~/.bashrc
-
-
-
-
-
 
 ## Task 1. Review the structure of Agent Development Kit project directories
 
@@ -79,7 +71,7 @@ source ~/.bashrc
 1. In the Cloud Shell Terminal, ensure you are in the **adk_project** directory where your agent subdirectories are located by running:
 
     ```bash
-    cd /adk_tools
+    cd adk_tools
     ```
 2. **Launch the Agent Development Kit Dev UI** with the following command:
 
@@ -114,6 +106,10 @@ source ~/.bashrc
     ```bash
     What is some recent global news?
     ```
+    or
+    ```
+    what are some new movies that have been released in the past month?
+    ```
 8. You will notice from the results that the agent is able to use Google Search to get up-to-date information, rather than having its information stop on the date when its model was trained.
 
     > **Important note:** When you use grounding with Google Search, you are [required to display these suggestions](https://cloud.google.com/vertex-ai/generative-ai/docs/multimodal/grounding-search-suggestions), which help users follow up on the information the model used for its response.
@@ -136,7 +132,7 @@ The LangChain community has created a [large number of tool integrations](https:
 6.  **Add the following code** where indicated in the `agent.py` file to add the [LangChain Wikipedia tool](https://python.langchain.com/docs/integrations/tools/wikipedia/) to your agent. This will allow your agent to search for information on [Wikipedia](https://www.wikipedia.org/):
 
     ```python
-      tools = [
+    tools = [
         # Use the LangchainTool wrapper...
         LangchainTool(
           # to pass in a LangChain tool.
@@ -174,7 +170,7 @@ The LangChain community has created a [large number of tool integrations](https:
 
 
 
-**What is Model Context Protocol (MCP)**
+## **What is Model Context Protocol (MCP)**
 
 Model Context Protocol (MCP) is an open standard designed to standardize how Large Language Models (LLMs) like Gemini and Claude communicate with external applications, data sources, and tools. Think of it as a universal connection mechanism that simplifies how LLMs obtain context, execute actions, and interact with various systems.
 
@@ -217,28 +213,10 @@ In this sub-section, you will generate a new API key named **GOOGLE_MAPS_API_KEY
 
 In this sub-section, you will configure your agent to use the `MCPToolset` for Google Maps, enabling it to seamlessly provide directions and location-based information.
 
-1.  Using your IDE find the **adk_mcp_tools** folder. Click it to toggle it open.
-2.  Navigate to the directory **adk_mcp_tools/google_maps_mcp_agent**.
-3.  Paste the following command in a plain text file, then update the `YOUR_ACTUAL_API_KEY` value with the Google Maps API key you generated and saved in a previous step:
-
-    ```bash
-    cd ~/adk_mcp_tools
-    cat << EOF > google_maps_mcp_agent/.env
-    GOOGLE_GENAI_USE_VERTEXAI=TRUE
-    GOOGLE_CLOUD_PROJECT=Project
-    GOOGLE_CLOUD_LOCATION=Region
-    GOOGLE_MAPS_API_KEY="YOUR_ACTUAL_API_KEY"
-    EOF
-    ```
-4.  Copy and paste the updated command to run it and write a **.env** file which will provide authentication details for this agent directory.
-5.  Copy the `.env` file to the other agent directory you will use in this lab by running the following command:
-
-    ```bash
-    cp google_maps_mcp_agent/.env adk_mcp_server/.env
-    ```
-6.  Click on the **agent.py** file in the **google_maps_mcp_agent** directory.
-7.  Notice the import of the `MCPToolset` class from ADK, along with `StdioConnectionParams` and `StdioServerParameters`. These are used to connect to an MCP server.
-8.  Add the following code where indicated in the `agent.py` file to add the Google Maps tool to your agent:
+1.  Using your IDE find the **.env** file and update the  `YOUR_ACTUAL_API_KEY` value with the Google Maps API key you generated and saved in a previous step:
+2.  Click on the **agent.py** file in the **google_maps_mcp_agent** directory.
+3.  Notice the import of the `MCPToolset` class from ADK, along with `StdioConnectionParams` and `StdioServerParameters`. These are used to connect to an MCP server.
+4.  Add the following code where indicated in the `agent.py` file to add the Google Maps tool to your agent:
 
     ```python
     tools=[

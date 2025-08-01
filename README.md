@@ -35,15 +35,23 @@ To prepare your environment for this workshop, follow these steps:
     ```
     python3 -m pip install -r requirements.txt
     ```
+    You can add the installation direction to your PATH for easier access
+    ```
+    echo 'export PATH="$PATH:$HOME/.local/bin"' >> ~/.bashrc
+    source ~/.bashrc
+    ```
+
 5.  **Rename the `dotenv.example` file to `.env` file** and configure your global parameters, including your GCP Project, Location, and Default Model:
-    ```
-    mv dotenv.example .env
-    ```
     ```
     GOOGLE_GENAI_USE_VERTEXAI=1
     GOOGLE_CLOUD_PROJECT=<YOUR_PROJECT_ID>
     GOOGLE_CLOUD_LOCATION=us-central1
     MODEL==gemini-2.0-flash-001
+    ```
+
+    
+    ```
+    mv dotenv.example .env
     ```
 
 ## Topics
