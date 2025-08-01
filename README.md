@@ -21,7 +21,7 @@ In this workshop, you will learn to:
 To prepare your environment for this workshop, follow these steps:
 
 1.  **Enable Vertex AI recommended APIs** see Step 3 from this [guide](https://cloud.google.com/vertex-ai/docs/start/cloud-environment#set_up_a_project)
-2.  **Clone this repository** to get the workshop materials: [GitHub repository](https://github.com/GCPartner/agent-framework-sdk-walkthrough).
+2.  **Clone this repository** to get the workshop materials:
     ```
     git clone https://github.com/GCPartner/adk_workshop.git
     ```
