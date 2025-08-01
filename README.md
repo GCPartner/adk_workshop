@@ -35,7 +35,10 @@ To prepare your environment for this workshop, follow these steps:
     ```
     python3 -m pip install -r requirements.txt
     ```
-5.  **Edit the `.env` file** to configure your global parameters, including your GCP Project, Location, and Default Model:
+5.  **Rename the `dotenv.example` file to `.env` file** and configure your global parameters, including your GCP Project, Location, and Default Model:
+    ```
+    mv dotenv.example .env
+    ```
     ```
     GOOGLE_GENAI_USE_VERTEXAI=1
     GOOGLE_CLOUD_PROJECT=<YOUR_PROJECT_ID>
