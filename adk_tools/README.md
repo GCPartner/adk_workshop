@@ -222,20 +222,20 @@ In this sub-section, you will configure your agent to use the `MCPToolset` for G
     tools=[
         MCPToolset(
         connection_params=StdioConnectionParams(
-          server_params=StdioServerParameters(
-            command="python3", # Command to run your MCP server script
-            args=[
-              "-y",
-              "@modelcontextprotocol/server-google-maps",
-            ],
-            env={
-              "GOOGLE_MAPS_API_KEY": google_maps_api_key
-            }
-          ),
-          timeout=15,
-          ),
+            server_params=StdioServerParameters(
+                command='npx',
+                args=[
+                    "-y",
+                    "@modelcontextprotocol/server-google-maps",
+                ],
+                env={
+                    "GOOGLE_MAPS_API_KEY": google_maps_api_key
+                }
+            ),
+            timeout=15,
+            ),
         )
-      ],
+    ],
     ```
 9.  **Save** the file.
 10. From the **adk_mcp_tools** project directory, **launch the Agent Development Kit Dev UI** with the following command:
