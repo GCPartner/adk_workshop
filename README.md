@@ -8,7 +8,7 @@ The [**Agent Development Kit (ADK)**](https://google.github.io/adk-docs/) is a p
 ## Workshop Objectives
 In this workshop, you will learn to:
 
-* **Understand** the fundamental concepts of ADK and its project structure.
+* **Understand** the fundamental concepts of ADK.
 * **Equip** agents with tools, including pre-built tools like Google Search and LangChain tools, and create custom tools from Python functions.
 * **Integrate** with external services using the **Model Context Protocol (MCP)**, acting as both an MCP client and server.
 * **Utilize** the **Agent-to-Agent (A2A) protocol** for complex communication between agents.
@@ -17,20 +17,6 @@ In this workshop, you will learn to:
 * **Deploy** your agents to **Agent Engine** for a scalable, production-ready environment.
 
 ## Getting Started
-
-
-### Configure GCP Project details
-
-1.  **Install ADK**
-
-    ```bash
-    sudo python3 -m pip install google-adk==1.6.1
-    ```
-2.  Install requirements with:
-
-    ```bash
-    sudo python3 -m pip install -r adk_project/requirements.txt
-    ```
 
 To prepare your environment for this workshop, follow these steps:
 
