@@ -1,6 +1,7 @@
 import asyncio
 import json
 import os
+sys.path.append("..")
 from dotenv import load_dotenv
 
 # MCP Server Imports

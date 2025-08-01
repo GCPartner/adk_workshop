@@ -2,8 +2,14 @@ from google.adk.agents import LlmAgent
 from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset, \
                     StdioServerParameters, StdioConnectionParams
 
+import sys
+import os
+sys.path.append("..")
+from dotenv import load_dotenv
+load_dotenv()
+
 # IMPORTANT: Replace this with the ABSOLUTE path to your adk_server.py script
-PATH_TO_YOUR_MCP_SERVER_SCRIPT = "/path/to/your/adk_server.py"
+PATH_TO_YOUR_MCP_SERVER_SCRIPT = os.path.expandvars("$HOME/adk_tools/adk_mcp_server/adk_server.py")
 
 if PATH_TO_YOUR_MCP_SERVER_SCRIPT == "None":
     print("WARNING: PATH_TO_YOUR_MCP_SERVER_SCRIPT is not set. Please update it in agent.py.")

@@ -1,10 +1,12 @@
 import os
+import sys
 from google.adk.agents import LlmAgent
 from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset, \
                 StdioServerParameters, StdioConnectionParams
+sys.path.append("..")
 from dotenv import load_dotenv
-
 load_dotenv()
+
 google_maps_api_key = os.environ.get("GOOGLE_MAPS_API_KEY")
 
 if not google_maps_api_key:

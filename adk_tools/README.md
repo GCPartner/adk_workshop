@@ -42,7 +42,7 @@ In this part of the workshop, you will create agent that can use variou tools. Y
 
 python3 -m pip install google-adk==1.6.1
 
-echo 'export PATH="$PATH:/home/student_02_d6dcb0759f23/.local/bin"' >> ~/.bashrc
+echo 'export PATH="$PATH:$HOME/.local/bin"' >> ~/.bashrc
 
 source ~/.bashrc
 
