@@ -238,7 +238,7 @@ In this sub-section, you will configure your agent to use the `MCPToolset` for G
     ],
     ```
 9.  **Save** the file.
-10. From the **adk_mcp_tools** project directory, **launch the Agent Development Kit Dev UI** with the following command:
+10. From the **adk_tools** project directory, **launch the Agent Development Kit Dev UI** with the following command:
 
     ```bash
     adk web
@@ -278,8 +278,8 @@ In this section, you'll learn how to expose the ADK `load_web_page` tool through
 
 ### Create the MCP Server Script and Implement Server Logic
 
-1.  In your IDE, find the **adk_mcp_tools** folder. Click it to toggle it open.
-2.  Navigate to the directory **adk_mcp_tools/adk_mcp_server**.
+1.  In your IDE, find the **adk_tools** folder. Click it to toggle it open.
+2.  Navigate to the directory **adk_tools/adk_mcp_server**.
 3.  A Python file named **adk_server.py** has been prepared and commented for you. **Take some time to review that file**, reading the comments to understand how the code wraps a tool and serves it as an MCP server. Notice how it allows MCP clients to list available tools as well as invoke the ADK tool asynchronously, handling requests and responses in an MCP-compliant format.
 
 ### Test the Custom MCP Server with an ADK Agent
@@ -310,13 +310,13 @@ In this section, you'll learn how to expose the ADK `load_web_page` tool through
 7.  To run the MCP server, start the `adk_server.py` script by running the following command in Terminal:
 
     ```bash
-    python3 ~/adk_mcp_tools/adk_mcp_server/adk_server.py
+    python3 adk_mcp_server/adk_server.py
     ```
 
-9.  Open a Terminal and from the **adk_mcp_tools** project directory, launch the **Agent Development Kit Dev UI** with the following command:
+9.  Open a Terminal and from the **adk_tools** project directory, launch the **Agent Development Kit Dev UI** with the following command:
 
     ```bash
-    cd ~/adk_mcp_tools
+    cd adk_tools
     adk web
     ```
 11. Click the **http://127.0.0.1:8000** link to open the ADK Dev UI.

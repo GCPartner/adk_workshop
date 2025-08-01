@@ -9,7 +9,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # IMPORTANT: Replace this with the ABSOLUTE path to your adk_server.py script
-PATH_TO_YOUR_MCP_SERVER_SCRIPT = os.path.expandvars("$HOME/adk_tools/adk_mcp_server/adk_server.py")
+PATH_TO_YOUR_MCP_SERVER_SCRIPT = os.path.expandvars("$HOME/adk_workshop/adk_tools/adk_mcp_server/adk_server.py")
+google_maps_api_key = os.environ.get("GOOGLE_MAPS_API_KEY")
 
 if PATH_TO_YOUR_MCP_SERVER_SCRIPT == "None":
     print("WARNING: PATH_TO_YOUR_MCP_SERVER_SCRIPT is not set. Please update it in agent.py.")
