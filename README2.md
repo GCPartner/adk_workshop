@@ -16,28 +16,6 @@ You will consider:
 ## Use your IDE of choice (like VSCode) to perform the following tasks:
 
 
-## Task 1. Install ADK and set up your environment
-
-### Configure GCP Project details
-
-### Enable Vertex AI recommended APIs
-
-1. Step 3 from this [guide](https://cloud.google.com/vertex-ai/docs/start/cloud-environment#set_up_a_project)
-
-
-### Download and install the ADK and code samples for this lab
-
-1.  **Install ADK**
-
-    ```bash
-    sudo python3 -m pip install google-adk==1.6.1
-    ```
-2.  Install requirements with:
-
-    ```bash
-    sudo python3 -m pip install -r adk_project/requirements.txt
-    ```
-
 
 ## Task 2. Review the structure of Agent Development Kit project directories
 
@@ -1427,3 +1405,5 @@ Click **Check my progress** to verify the objective.
 #### Human-in-the-loop pattern
 
 Even though this example uses a `SequentialAgent` workflow agent, you can think of this pattern as a human-in-the-loop pattern. When the `SequentialAgent` ends its sequence, the conversation goes back to its parent, the `llm_auditor` in this example, to get a new input turn from the user and then pass the conversation back around to the other agents.
+
+
