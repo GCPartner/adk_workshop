@@ -35,7 +35,7 @@ To prepare your environment for this workshop, follow these steps:
     ```
     python3 -m pip install -r requirements.txt
     ```
-    You can add the installation direction to your PATH for easier access
+    If you are not using a virtual environment you can add the installation direction to your PATH
     ```
     echo 'export PATH="$PATH:$HOME/.local/bin"' >> ~/.bashrc
     source ~/.bashrc
