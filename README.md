@@ -24,6 +24,7 @@ To prepare your environment for this workshop, follow these steps:
 2.  **Clone this repository** to get the workshop materials:
     ```
     git clone https://github.com/GCPartner/adk_workshop.git
+    cd adk_workshop
     ```
 3.  **Create a new Python virtual environment** and activate it:
     ```
