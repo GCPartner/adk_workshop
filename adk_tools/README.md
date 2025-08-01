@@ -310,7 +310,7 @@ In this section, you'll learn how to expose the ADK `load_web_page` tool through
 7.  To run the MCP server, start the `adk_server.py` script by running the following command in Terminal:
 
     ```bash
-    python3 adk_mcp_server/adk_server.py
+    python3 ~/adk_workshop/adk_tools/adk_mcp_server/adk_server.py
     ```
 
 9.  Open a Terminal and from the **adk_tools** project directory, launch the **Agent Development Kit Dev UI** with the following command:
