@@ -272,7 +272,7 @@ In this sub-section, you will configure your agent to use the `MCPToolset` for G
 18. When you are finished asking questions of this agent, close the dev UI browser tab.
 19. In the Terminal, press **CTRL + C** to stop the server.
 
-## Task 3. Building an MCP server with ADK tools (MCP server exposing ADK)
+## Task 5. Building an MCP server with ADK tools (MCP server exposing ADK)
 
 In this section, you'll learn how to expose the ADK `load_web_page` tool through a custom-built MCP server. This pattern allows you to wrap existing ADK tools and make them accessible to any standard MCP client application.
 
@@ -324,7 +324,7 @@ In this section, you'll learn how to expose the ADK `load_web_page` tool through
 13. Query the agent with:
 
     ```bash
-    Load the content from https://example.com.
+    Load the content from https://example.com
     ```
 
 15. What happens here:

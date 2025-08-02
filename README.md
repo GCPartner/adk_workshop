@@ -54,9 +54,9 @@ To prepare your environment for this workshop, follow these steps:
     mv dotenv.example .env
     ```
 
-## Topics
+## Workshop Modules
 
-1. Introduction to ADK and its tools go to [adk_tools directory](adk_tools) combine project + tool + MCP
-2. Multi-Agent design go to [adk_multiagent_systems](adk_multiagent_systems) combine multiagent + a2a
+1. [Introduction to ADK and its tools](adk_tools) and MCP
+2. [Multi-Agent design](adk_multiagent_systems) and A2A
 3. Deploy to Agent Enginge go to [adk_to_agent_engine](adk_to_agent_engine)]
 -----
