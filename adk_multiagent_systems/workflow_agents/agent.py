@@ -143,14 +143,14 @@ researcher = Agent(
 )
 
 film_concept_team = SequentialAgent(
-    name="film_concept_team",
-    description="Write a film plot outline and save it as a text file.",
-    sub_agents=[
-        researcher,
-        screenwriter,
-        file_writer
-    ],
-)
+        name="film_concept_team",
+        description="Write a film plot outline and save it as a text file.",
+        sub_agents=[
+            researcher,
+            screenwriter,
+            file_writer
+        ],
+    )
 
 root_agent = Agent(
     name="greeter",
