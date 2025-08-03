@@ -56,7 +56,7 @@ To prepare your environment for this workshop, follow these steps:
 
 ## Workshop Modules
 
-1. [Introduction to ADK and its tools](adk_tools) and MCP
-2. [Multi-Agent design](adk_multiagent_systems) and A2A
+1. [Introduction to ADK and its tools](adk_tools) with MCP and A2A
+2. [Multi-Agent design](adk_multiagent_systems)
 3. [Deploy to Agent Enginge](adk_to_agent_engine)
 -----
