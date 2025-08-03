@@ -58,5 +58,5 @@ To prepare your environment for this workshop, follow these steps:
 
 1. [Introduction to ADK and its tools](adk_tools) and MCP
 2. [Multi-Agent design](adk_multiagent_systems) and A2A
-3. [Deploy to Agent Enginge](adk_to_agent_engine)]
+3. [Deploy to Agent Enginge](adk_to_agent_engine)
 -----
