@@ -40,8 +40,6 @@ In this part of the workshop, you will create agent that can use variou tools. Y
 
 ## Use your IDE of choice (like VSCode) to perform the following tasks:
 
-python3 -m pip install google-adk==1.6.1
-
 
 ## Task 1. Review the structure of Agent Development Kit project directories
 
@@ -208,6 +206,7 @@ In this sub-section, you will generate a new API key named **GOOGLE_MAPS_API_KEY
     The **API key created** dialog will display your newly created API key. Be sure to save this key locally for later use in the lab.
 4.  Click **Close** on the dialog box.
     Your newly created key will be named **API Key 1** by default. Select the key, rename it to **GOOGLE_MAPS_API_KEY**, and click **Save**.
+5.  Double check that **Directions API** is enabled.
 
 ### Define your Agent with an MCP Toolset for Google Maps
 
@@ -285,7 +284,7 @@ In this section, you'll learn how to expose the ADK `load_web_page` tool through
 ### Test the Custom MCP Server with an ADK Agent
 
 1.  Click on the **agent.py** file in the **adk_mcp_server** directory.
-2.  Update the path to your **adk_server.py** file.
+2.  Check the path to your **adk_server.py** file.
 5.  Next, add the following code where indicated in the `agent.py` file to add the ADK `load_web_page` tool to your agent:
 
     ```python
@@ -316,7 +315,7 @@ In this section, you'll learn how to expose the ADK `load_web_page` tool through
 9.  Open a Terminal and from the **adk_tools** project directory, launch the **Agent Development Kit Dev UI** with the following command:
 
     ```bash
-    cd adk_tools
+    cd ~/adk_workshop/adk_tools
     adk web
     ```
 11. Click the **http://127.0.0.1:8000** link to open the ADK Dev UI.

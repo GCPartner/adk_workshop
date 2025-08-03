@@ -20,8 +20,8 @@ from google.genai import types
 
 #import sys
 #sys.path.append("..")
-#from dotenv import load_dotenv
-#load_dotenv()
+from dotenv import load_dotenv
+load_dotenv()
 
 
 
