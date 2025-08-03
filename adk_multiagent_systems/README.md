@@ -55,7 +55,7 @@ The A2A Human-in-the-Loop sample consists of:
 
 2. **Run the Main Agent**:
    ```bash
-   # In a separate terminal, run the adk web server
+   # In a separate terminal, run the adk web server (verify that you're in the same virtual environment, if not run "source .venv/bin/activate" )
    adk web adk_multiagent_systems/
    ```
 
@@ -546,15 +546,13 @@ To make these changes:
 15. Once you have chosen a type of character, the agent should work its way through iterations of the loop and finally give the film a title and write the outline to a file.
 16. Review the file generated, which should be saved in the **adk_multiagent_systems/movie_pitches** directory. If a part of the process fails, **start a new session** and try again.
 
-## (MAYBE SKIP) Task 6. Use a "fan out and gather" pattern for report generation with a ParallelAgent
+## Task 6. Use a "fan out and gather" pattern for report generation with a ParallelAgent
 
 The `ParallelAgent` enables concurrent execution of its sub-agents. Each sub-agent operates in its own branch, and by default, they do not share conversation history or state directly with each other during parallel execution.
 
 This is valuable for tasks that can be divided into independent sub-tasks that can be processed simultaneously. Using a `ParallelAgent` can significantly reduce the overall execution time for such tasks.
 
 In this lab, you will add some supplemental reports -- some research on potential box office performance and some initial ideas on casting -- to enhance the pitch for your new film.
-
-[Image of Film_concept_team multi-agent system step 3]
 
 Your revised agent will flow like this:
 
