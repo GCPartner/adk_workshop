@@ -1,4 +1,3 @@
-```markdown
 # Deploy ADK agents to Agent Engine
 
 Learn to deploy ADK agents to Agent Engine for a scalable, fully managed environment for your agentic workflows, so you can focus on the agents' logic while infrastructure is allocated and scaled for you.
