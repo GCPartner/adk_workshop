@@ -60,3 +60,11 @@ To prepare your environment for this workshop, follow these steps:
 2. [Multi-Agent design](adk_multiagent_systems)
 3. [Deploy to Agent Engine](adk_to_agent_engine)
 -----
+
+## Resource
+
+More resources, samples, and documentation some of which was used to build this workshop
+* [Agent2Agent repo](https://github.com/a2aproject/a2a-samples/tree/main/samples/python/agents)
+* [ADK python repo](https://github.com/google/adk-python/tree/main/contributing/samples)
+* [ADK samples repo](https://github.com/google/adk-samples/tree/main/python)
+* [Challenge Lab](https://www.cloudskillsboost.google/focuses/127754?catalog_rank=%7B%22rank%22%3A5%2C%22num_filters%22%3A0%2C%22has_search%22%3Atrue%7D&parent=catalog&search_id=50174411)
