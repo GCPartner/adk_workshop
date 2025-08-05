@@ -15,37 +15,10 @@ You can learn more about its benefits in the [Vertex AI Agent Engine documentati
 
 
 
-   python3 -m pip install google-adk==1.6.1 --upgrade --force-reinstall
-
 ## Task 1. Deploy your agent app to Agent Engine
 1. To create a script to deploy your app to Agent Engine, right-click on the **transcript_summarization_agent** directory and select **New File...**.
 2. Name the file `deploy_to_agent_engine.py`.
-3. In this file, paste the following code:
-   ```python
-import os
-import vertexai
-from vertexai import agent_engines
-from dotenv import load_dotenv
 
-from agent import root_agent
-
-load_dotenv()
-
-vertexai.init(
-    project=os.getenv("GOOGLE_CLOUD_PROJECT"),
-    location=os.getenv("GOOGLE_CLOUD_LOCATION"),
-    staging_bucket="gs://" + os.getenv("GOOGLE_CLOUD_PROJECT")+"-bucket",
-)
-
-remote_app = agent_engines.create(
-    display_name=os.getenv("APP_NAME", "Agent App"),
-    agent_engine=root_agent,
-    requirements=[
-        "google-cloud-aiplatform[adk,agent_engines]"
-    ]
-)
-   ```
-4. Save the file.
 5. Review this script as well. Once again, your **root_agent** is imported, but this time it is deployed to Agent Engine with the `agent_engines.create()` method. Behind the scenes, your agent will again be wrapped to handle user sessions.
 6. Run this file from the **transcript_summarization_agent** directory with:
    ```bash
