@@ -16,7 +16,7 @@ You can learn more about its benefits in the [Vertex AI Agent Engine documentati
 
 
 ## Task 1. Deploy your agent app to Agent Engine
-1. To create a script to deploy your app to Agent Engine, right-click on the **transcript_summarization_agent** directory and select **New File...**.
+1. To create a script to deploy your app to Agent Engine, right-click on the **transcript_summarization_agent** directory.
 2. Name the file `deploy_to_agent_engine.py`.
 
 5. Review this script as well. Once again, your **root_agent** is imported, but this time it is deployed to Agent Engine with the `agent_engines.create()` method. Behind the scenes, your agent will again be wrapped to handle user sessions.
