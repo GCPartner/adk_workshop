@@ -46,7 +46,8 @@ You can learn more about its benefits in the [Vertex AI Agent Engine documentati
 8. An agent deployed to Agent Engine needs to be able to act as a web app that can create and retrieve user sessions from its session service. To see this locally, right-click on the **transcript_summarization_agent** directory and select **New File...**.
 9. Name the file `test_agent_app_locally.py`.
 10. In this file, paste the following code:
-    ```python
+   ```python
+
 import logging
 import google.cloud.logging
 import asyncio
@@ -85,11 +86,13 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-    ```
-11. Review the code above. Notice that your **root_agent** is imported from your **agent.py** file. This script then uses the class `reasoning_engines.AdkApp` to wrap your agent in order for it to act as a web app which can handle the creation and management of user sessions.
-12. Read the transcript that is passed as input so that you can determine if the agent did a good job summarizing it. (The Agent Development Kit can help you be more systematic in evaluating your ADK agents, but that is a topic for another lab.)
-13. **Save** the file.
-14. This file will execute the `stream_query()` method of the `reasoning_engines.AdkApp` class locally. To run it, paste and run this command in the Cloud Shell Terminal:
+
+   ```
+
+6. Review the code above. Notice that your **root_agent** is imported from your **agent.py** file. This script then uses the class `reasoning_engines.AdkApp` to wrap your agent in order for it to act as a web app which can handle the creation and management of user sessions.
+7. Read the transcript that is passed as input so that you can determine if the agent did a good job summarizing it. (The Agent Development Kit can help you be more systematic in evaluating your ADK agents, but that is a topic for another lab.)
+8. **Save** the file.
+9. This file will execute the `stream_query()` method of the `reasoning_engines.AdkApp` class locally. To run it, paste and run this command in the Cloud Shell Terminal:
     ```bash
     cd ~/adk_workshop/adk_to_agent_engine/transcript_summarization_agent
     python3 test_agent_app_locally.py
@@ -99,7 +102,7 @@ if __name__ == "__main__":
     The user contacted a virtual agent to buy a car, but the agent repeatedly tried to sell the user a boat instead. The user ended the conversation.
     ```
 
-## Task 4. Get and query an agent deployed to Agent Engine
+## Task 3. Get and query an agent deployed to Agent Engine
 1. For your agent to be able to use models and manage sessions through Vertex AI, you'll need to grant the Agent Engine service agent permissions. Navigate to **IAM** in the console.
 2. Click the checkbox to **Include Google-provided role grants**.
 3. Find the **AI Platform Reasoning Engine Service Agent** (`service-PROJECT_NUMBER@gcp-sa-aiplatform-re.iam.gserviceaccount.com`) and click the pencil icon in its row.
